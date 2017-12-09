@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>victory</title>
+    <link rel = "stylesheet" type = "text/css" href = "./styles/victory.css"/>
+</head>
+<body>
+
+<div id = "centerBox" align="center">
+    <h1>Результат тренировки</h1>
+    <hr>
+    <div style = "padding-top: 20px"></div>
+    <div>
+        <h1 style="color: limegreen">Тренировка пройдена успешно.</h1>
+        <div style = "padding-top: 20px"></div>
+        <button onclick = "saveResultToDB();">Сохранить результат</button>
+        <div style = "padding-top: 20px"></div>
+        <button onclick = "window.location = 'menu.html';" style="background-color: lightsalmon;">Главное меню</button>
+    </div>
+</div>
+
+<script>
+    function saveResultToDB() {
+        const obj =  JSON.parse(decodeURIComponent(localStorage.getItem("nowLevel@@@@@")));
+
+        const level_array = obj.arr + "";
+        const level_name = obj.levelName + "";
+        const user_name = localStorage.getItem("USER_NAME") + "";
+        const game_result = "YES";
+
+        let objectForSending = {
+            level_array: level_array,
+            level_name: level_name,
+            user_name: user_name,
+            game_result: game_result
+        };
+
+        console.log(objectForSending);
+
+        let url = "http://popop-database-server.herokuapp.com/add_data";
+
+        let r = new XMLHttpRequest();
+        r.open("POST", url, true);
+        r.setRequestHeader("Content-Type","application/json;charset=UTF-8");
+        const s = JSON.stringify(objectForSending);
+        r.send(s);
+        r.onreadystatechange = function() {
+            if(r.readyState === 4 && r.status === 200) {
+            	alert("Сохранение прошло успешно");
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
